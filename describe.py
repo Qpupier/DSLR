@@ -6,7 +6,7 @@
 #    By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2026/09/24 15:04:40 by qpupier           #+#    #+#              #
-#    Updated: 2026/09/25 14:55:45 by qpupier          ###   ########lyon.fr    #
+#    Updated: 2026/09/25 14:57:33 by qpupier          ###   ########lyon.fr    #
 #                                                                              #
 # **************************************************************************** #
 
@@ -27,7 +27,7 @@ line_std = []
 line_min = []
 line_ft_quartile = []
 line_median = []
-line_th_quartile = []
+line_rd_quartile = []
 line_max = []
 for data in datas:
 	count = 0
@@ -46,17 +46,17 @@ for data in datas:
 	else:
 		median = (data[int(count * 0.5) - 1] + data[int(count * 0.5)]) / 2
 	if count % 4:
-		fst_quartile = data[int(count * 0.25)]
-		thd_quartile = data[int(count * 0.75)]
+		ft_quartile = data[int(count * 0.25)]
+		rd_quartile = data[int(count * 0.75)]
 	else:
-		fst_quartile = (data[int(count * 0.25) - 1] + data[int(count * 0.25)]) / 2
-		thd_quartile = (data[int(count * 0.75) - 1] + data[int(count * 0.75)]) / 2
+		ft_quartile = (data[int(count * 0.25) - 1] + data[int(count * 0.25)]) / 2
+		rd_quartile = (data[int(count * 0.75) - 1] + data[int(count * 0.75)]) / 2
 	line_count.append(count)
 	line_mean.append(total / count if count > 0 else 0)
 	line_min.append(min)
-	line_ft_quartile.append(fst_quartile)
+	line_ft_quartile.append(ft_quartile)
 	line_median.append(median)
-	line_th_quartile.append(thd_quartile)
+	line_rd_quartile.append(rd_quartile)
 	line_max.append(max)
 	for nb in data:
 		if pd.notna(nb):
@@ -68,7 +68,7 @@ lines["Std"] = line_std
 lines["Min"] = line_min
 lines["25%"] = line_ft_quartile
 lines["50%"] = line_median
-lines["75%"] = line_th_quartile
+lines["75%"] = line_rd_quartile
 lines["Max"] = line_max
 result = pd.DataFrame.from_dict(lines, orient="index", columns=columns)
 print(result)
