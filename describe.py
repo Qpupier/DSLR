@@ -6,7 +6,7 @@
 #    By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2026/09/24 15:04:40 by qpupier           #+#    #+#              #
-#    Updated: 2026/09/25 13:59:58 by qpupier          ###   ########lyon.fr    #
+#    Updated: 2026/09/25 14:55:45 by qpupier          ###   ########lyon.fr    #
 #                                                                              #
 # **************************************************************************** #
 
@@ -41,12 +41,14 @@ for data in datas:
 			if not min:
 				min = nb
 			max = nb
-	if count % 2 == 0:
+	if count % 2:
 		median = data[int(count * 0.5)]
+	else:
+		median = (data[int(count * 0.5) - 1] + data[int(count * 0.5)]) / 2
+	if count % 4:
 		fst_quartile = data[int(count * 0.25)]
 		thd_quartile = data[int(count * 0.75)]
 	else:
-		median = (data[int(count * 0.5) - 1] + data[int(count * 0.5)]) / 2
 		fst_quartile = (data[int(count * 0.25) - 1] + data[int(count * 0.25)]) / 2
 		thd_quartile = (data[int(count * 0.75) - 1] + data[int(count * 0.75)]) / 2
 	line_count.append(count)
