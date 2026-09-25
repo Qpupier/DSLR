@@ -6,7 +6,7 @@
 #    By: tdutel <tdutel@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2026/09/25 11:38:23 by tdutel            #+#    #+#              #
-#    Updated: 2026/09/25 16:38:47 by tdutel           ###   ########.fr        #
+#    Updated: 2026/09/25 16:44:10 by tdutel           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -25,8 +25,8 @@ colors = {
 
 
 for house in colors:
-	data = df[df["Hogwarts House"] == house][feature]
-	plt.hist(data, bins=15, color=colors[house], alpha=0.5, label=house)
+	data = df[df["Hogwarts House"] == house]
+	plt.hist(data[feature], bins=15, color=colors[house], alpha=0.5, label=house)
 
 plt.title(feature)
 plt.xlabel("Notes")
