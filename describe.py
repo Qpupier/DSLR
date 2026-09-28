@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    describe.py                                        :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+         #
+#    By: tdutel <tdutel@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2026/09/24 15:04:40 by qpupier           #+#    #+#              #
-#    Updated: 2026/09/25 14:57:33 by qpupier          ###   ########lyon.fr    #
+#    Updated: 2026/09/28 15:55:22 by tdutel           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -60,7 +60,7 @@ for data in datas:
 	line_max.append(max)
 	for nb in data:
 		if pd.notna(nb):
-			std += (nb - median) ** 2
+			std += (nb - median) ** 2	# TODO : changer median par mean pour calculer l'écart type
 	line_std.append((std / count) ** 0.5 if count > 0 else 0)
 lines["Count"] = line_count
 lines["Mean"] = line_mean
