@@ -6,7 +6,7 @@
 #    By: tdutel <tdutel@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2026/09/28 11:48:06 by tdutel            #+#    #+#              #
-#    Updated: 2026/09/28 14:23:53 by tdutel           ###   ########.fr        #
+#    Updated: 2026/09/28 16:11:17 by tdutel           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -38,6 +38,7 @@ for column in df.columns:
 #	Replace NaN values in each feature column with the mean of that column	#
 #############################################################################
 
+means = {}
 for feature in features:
 
 	total = 0
@@ -49,8 +50,8 @@ for feature in features:
 			count += 1
 
 	mean = total / count if count > 0 else 0
-
 	df.loc[df[feature].isna(), feature] = mean
+	means[feature] = mean
 
 	# print("\n\n Feature :", feature)
 	# print("\n\nligne 4 du df :", df.iloc[4]) # tester avec un eleve qui a NaN a Defense Against the Dark Arts, pour voir si la valeur a été remplacée par la moyenne
@@ -60,4 +61,19 @@ for feature in features:
 #############################################################################################
 #	Standardize the features by subtracting the mean and dividing by the standard deviation	#
 #############################################################################################
+standard_deviations = {}
 
+for feature in features:
+	squared_diff_sum = 0
+
+	for value in df[feature]:
+		squared_diff_sum += (value - means[feature]) ** 2
+
+	sqrt_squared_diff_mean = (squared_diff_sum / len(df[feature])) ** 0.5
+	standard_deviations[feature] = sqrt_squared_diff_mean
+
+	print(f"Feature: {feature}, Mean: {means[feature]}, Standard Deviation: {sqrt_squared_diff_mean}")
+
+	df[feature] = (df[feature] - means[feature]) / sqrt_squared_diff_mean
+	# df.loc[feature] =  (value - means[features]) / standard_deviations[features]
+	print("test : ", df.loc[feature])
