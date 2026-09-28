@@ -6,7 +6,7 @@
 #    By: tdutel <tdutel@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2026/09/28 11:48:06 by tdutel            #+#    #+#              #
-#    Updated: 2026/09/28 16:11:17 by tdutel           ###   ########.fr        #
+#    Updated: 2026/09/28 23:29:00 by tdutel           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -14,6 +14,8 @@ import	sys
 from	pathlib import Path
 import	pandas as pd
 
+
+# On passe par une standardisation des données pour que les notes des features aient toutes la même échelle
 
 ##############################################
 #	Load the CSV file and check for errors	#
@@ -69,11 +71,37 @@ for feature in features:
 	for value in df[feature]:
 		squared_diff_sum += (value - means[feature]) ** 2
 
-	sqrt_squared_diff_mean = (squared_diff_sum / len(df[feature])) ** 0.5
-	standard_deviations[feature] = sqrt_squared_diff_mean
+	standard_deviations[feature] = (squared_diff_sum / len(df[feature])) ** 0.5 if len(df[feature]) > 0 else 0 # Avoid division by zero
 
-	print(f"Feature: {feature}, Mean: {means[feature]}, Standard Deviation: {sqrt_squared_diff_mean}")
+	df[feature] = (df[feature] - means[feature]) / standard_deviations[feature]
 
-	df[feature] = (df[feature] - means[feature]) / sqrt_squared_diff_mean
-	# df.loc[feature] =  (value - means[features]) / standard_deviations[features]
-	print("test : ", df.loc[feature])
+print((df[features]))
+
+
+#######################################################################
+# creation d'une classification binaire pour chaque maison, pour pouvoir faire du one-vs-all
+#######################################################################
+house = "Gryffindor"		# pour tester un premier modele avec gryffindor, puis on pourra faire un modele pour chaque maison
+
+y = []
+
+for student_house in df["Hogwarts House"]:
+	if student_house == house:
+		y.append(1)
+	else:
+		y.append(0)
+
+# ###########################################################################
+# #	Calculer le score z
+# ###########################################################################
+theta = [0] * (len(features) + 1)
+scoreZ = []
+for student in range(len(df)):
+	z = theta[0]
+
+	for i in range(len(features)):
+		print(features[i], "\t\t\t\tValue:",  df.loc[student, features[i]], "Theta:", theta[i + 1])
+		z += theta[i + 1] * df.loc[student, features[i]] 
+		print("z:", z)
+	scoreZ.append(z)
+	exit() # pour tester l'affichage des features et des valeurs de theta
