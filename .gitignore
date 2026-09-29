@@ -1,1 +1,4 @@
 venv
+weights.csv
+houses.csv
+__pycache__
