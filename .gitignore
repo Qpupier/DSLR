@@ -2,3 +2,5 @@ venv
 weights.csv
 houses.csv
 __pycache__
+*_20.csv
+*_80.csv
