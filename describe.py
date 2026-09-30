@@ -6,7 +6,7 @@
 #    By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2026/09/24 15:04:40 by qpupier           #+#    #+#              #
-#    Updated: 2026/09/30 18:03:55 by qpupier          ###   ########lyon.fr    #
+#    Updated: 2026/09/30 18:12:52 by qpupier          ###   ########lyon.fr    #
 #                                                                              #
 # **************************************************************************** #
 
@@ -32,6 +32,7 @@ if __name__ == "__main__":
 	line_median = []
 	line_rd_quartile = []
 	line_max = []
+	line_skewness = []
 	for data in datas:
 		count = 0
 		total = 0
@@ -68,6 +69,11 @@ if __name__ == "__main__":
 			if pd.notna(nb):
 				std += (nb - line_mean[datas.index(data)]) ** 2
 		line_std.append((std / count) ** 0.5 if count > 0 else 0)
+		skewness = 0
+		for nb in data:
+			if pd.notna(nb):
+				skewness += ((nb - line_mean[datas.index(data)]) / line_std[datas.index(data)]) ** 3
+		line_skewness.append(skewness / count if count > 0 else 0)
 	lines["Count"] = line_count
 	lines["Mean"] = line_mean
 	lines["Std"] = line_std
@@ -78,6 +84,7 @@ if __name__ == "__main__":
 	lines["Max"] = line_max
 	lines["Range"] = [max - min for max, min in zip(line_max, line_min)]
 	lines["IQR"] = [rd_quartile - ft_quartile for rd_quartile, ft_quartile in zip(line_rd_quartile, line_ft_quartile)]
+	lines["Skewness"] = line_skewness
 	lines["Missing"] = [df_size - count for count in line_count]
 	lines["Missing (%)"] = [round((df_size - count) / df_size * 100, 2) for count in line_count]
 	result = pd.DataFrame.from_dict(lines, orient="index", columns=columns)
