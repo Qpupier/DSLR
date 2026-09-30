@@ -6,17 +6,24 @@
 #    By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2026/09/29 17:28:22 by qpupier           #+#    #+#              #
-#    Updated: 2026/09/30 11:55:20 by qpupier          ###   ########lyon.fr    #
+#    Updated: 2026/09/30 12:06:57 by qpupier          ###   ########lyon.fr    #
 #                                                                              #
 # **************************************************************************** #
 
 import sys
 import pandas as pd
+import matplotlib.pyplot as plt
 from math import log, exp
 
 COLUMN_HOUSE_NAME = "Hogwarts House"
 COLUMN_INDEX_NAME = "Index"
 HOUSES = ["Gryffindor", "Slytherin", "Hufflepuff", "Ravenclaw"]
+COLORS = {
+	"Gryffindor": "red",
+	"Hufflepuff": "yellow",
+	"Ravenclaw": "blue",
+	"Slytherin": "green"
+}
 
 def g(z):
 	return 1 / (1 + exp(-z))

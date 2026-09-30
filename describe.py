@@ -6,7 +6,7 @@
 #    By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2026/09/24 15:04:40 by qpupier           #+#    #+#              #
-#    Updated: 2026/09/30 11:42:45 by qpupier          ###   ########lyon.fr    #
+#    Updated: 2026/09/30 11:59:01 by qpupier          ###   ########lyon.fr    #
 #                                                                              #
 # **************************************************************************** #
 
@@ -40,6 +40,8 @@ if __name__ == "__main__":
 				if not min:
 					min = nb
 				max = nb
+		if not count:
+			error("The dataset is empty or contains only NaN values.")
 		if count % 2:
 			median = data[int(count * 0.5)]
 		else:

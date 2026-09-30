@@ -3,33 +3,25 @@
 #                                                         :::      ::::::::    #
 #    scatter_plot.py                                    :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: tdutel <tdutel@student.42.fr>              +#+  +:+       +#+         #
+#    By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2026/09/25 16:38:17 by tdutel            #+#    #+#              #
-#    Updated: 2026/09/25 16:44:24 by tdutel           ###   ########.fr        #
+#    Updated: 2026/09/30 12:08:14 by qpupier          ###   ########lyon.fr    #
 #                                                                              #
 # **************************************************************************** #
 
-import pandas as pd		# sert à manipuler des données sous forme de tableaux, notamment les fichiers CSV
-import matplotlib.pyplot as plt		#sert à tracer des graphiques
+from utils import *
 
-df = pd.read_csv('datasets/dataset_train.csv')
+df = parse_csv('datasets/dataset_train.csv')
 
 feature = "Care of Magical Creatures"
-colors = {
-	"Gryffindor": "red",
-	"Hufflepuff": "yellow",
-	"Ravenclaw": "blue",
-	"Slytherin": "green"
-}
 
-
-for house in colors:
-	data = df[df["Hogwarts House"] == house]
-	plt.scatter(data['Astronomy'], data['Defense Against the Dark Arts'], color=colors[house], label=house)
+for house in COLORS:
+	data = df[df[COLUMN_HOUSE_NAME] == house]
+	plt.scatter(data['Astronomy'], data['Defense Against the Dark Arts'], color=COLORS[house], label=house)
 
 plt.title(feature)
-plt.xlabel("Notes")
-plt.ylabel("Nombre d'élèves")
+plt.xlabel("Grades")
+plt.ylabel("Number of Students")
 plt.legend()
 plt.show()

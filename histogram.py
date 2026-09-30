@@ -3,33 +3,25 @@
 #                                                         :::      ::::::::    #
 #    histogram.py                                       :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: tdutel <tdutel@student.42.fr>              +#+  +:+       +#+         #
+#    By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2026/09/25 11:38:23 by tdutel            #+#    #+#              #
-#    Updated: 2026/09/25 16:44:10 by tdutel           ###   ########.fr        #
+#    Updated: 2026/09/30 12:07:59 by qpupier          ###   ########lyon.fr    #
 #                                                                              #
 # **************************************************************************** #
 
-import pandas as pd		# sert à manipuler des données sous forme de tableaux, notamment les fichiers CSV
-import matplotlib.pyplot as plt		#sert à tracer des graphiques
+from utils import *
 
-df = pd.read_csv('datasets/dataset_train.csv')
+df = parse_csv('datasets/dataset_train.csv')
 
 feature = "Care of Magical Creatures"
-colors = {
-	"Gryffindor": "red",
-	"Hufflepuff": "yellow",
-	"Ravenclaw": "blue",
-	"Slytherin": "green"
-}
 
-
-for house in colors:
-	data = df[df["Hogwarts House"] == house]
-	plt.hist(data[feature], bins=15, color=colors[house], alpha=0.5, label=house)
+for house in COLORS:
+	data = df[df[COLUMN_HOUSE_NAME] == house]
+	plt.hist(data[feature], bins=15, color=COLORS[house], alpha=0.5, label=house)
 
 plt.title(feature)
-plt.xlabel("Notes")
-plt.ylabel("Nombre d'élèves")
+plt.xlabel("Grades")
+plt.ylabel("Number of Students")
 plt.legend()
 plt.show()
