@@ -6,14 +6,17 @@
 #    By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2026/09/24 15:04:40 by qpupier           #+#    #+#              #
-#    Updated: 2026/09/30 11:59:01 by qpupier          ###   ########lyon.fr    #
+#    Updated: 2026/09/30 18:03:55 by qpupier          ###   ########lyon.fr    #
 #                                                                              #
 # **************************************************************************** #
 
 from utils import *
 
 if __name__ == "__main__":
+	if len(sys.argv) != 2:
+		error(f"Usage: python describe.py <dataset.csv>")
 	df = parse_csv(sys.argv[1])
+	df_size = len(df)
 	datas = []
 	columns = []
 	for column in df.columns:
@@ -73,5 +76,9 @@ if __name__ == "__main__":
 	lines["50%"] = line_median
 	lines["75%"] = line_rd_quartile
 	lines["Max"] = line_max
+	lines["Range"] = [max - min for max, min in zip(line_max, line_min)]
+	lines["IQR"] = [rd_quartile - ft_quartile for rd_quartile, ft_quartile in zip(line_rd_quartile, line_ft_quartile)]
+	lines["Missing"] = [df_size - count for count in line_count]
+	lines["Missing (%)"] = [round((df_size - count) / df_size * 100, 2) for count in line_count]
 	result = pd.DataFrame.from_dict(lines, orient="index", columns=columns)
 	print(result)
