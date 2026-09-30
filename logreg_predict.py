@@ -6,11 +6,12 @@
 #    By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2026/09/29 15:31:56 by qpupier           #+#    #+#              #
-#    Updated: 2026/09/30 11:52:54 by qpupier          ###   ########lyon.fr    #
+#    Updated: 2026/09/30 14:02:24 by qpupier          ###   ########lyon.fr    #
 #                                                                              #
 # **************************************************************************** #
 
 from utils import *
+from sklearn.metrics import accuracy_score
 
 if __name__ == "__main__":
 
@@ -30,11 +31,16 @@ if __name__ == "__main__":
 	test_df.fillna(weights_df.loc[features, "Mean"], inplace=True)
 	test_df[features] = normalize_from_weights(test_df, features, weights_df)
 
+	list_predictions = []
+	verities = []
 	predicted_houses = []
 	for _, row in test_df.iterrows():
 		x = [row[feature] for feature in features] + [1]
 		predictions = {house: h(weights_df[f'Theta_{house}'].values, x) for house in HOUSES}
 		predicted_house = max(predictions, key=predictions.get)
+		if row[COLUMN_HOUSE_NAME] in HOUSES:
+			list_predictions.append(predicted_house)
+			verities.append(row[COLUMN_HOUSE_NAME])
 		predicted_houses.append(predicted_house)
 
 	houses_df = pd.DataFrame({
@@ -43,3 +49,7 @@ if __name__ == "__main__":
 	})
 	print(houses_df)
 	houses_df.to_csv('houses.csv', index=False)
+
+	if list_predictions:
+		accuracy = accuracy_score(verities, list_predictions)
+		print(f"\nAccuracy: {accuracy:.2%}")

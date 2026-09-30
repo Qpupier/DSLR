@@ -6,14 +6,14 @@
 #    By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2026/09/29 11:49:42 by qpupier           #+#    #+#              #
-#    Updated: 2026/09/30 11:52:32 by qpupier          ###   ########lyon.fr    #
+#    Updated: 2026/09/30 14:08:54 by qpupier          ###   ########lyon.fr    #
 #                                                                              #
 # **************************************************************************** #
 
 from utils import *
 
-LEARNING_RATE = 0.1
-NB_ITERATIONS = 100
+LEARNING_RATE = 0.412
+NB_ITERATIONS = 1000
 
 if __name__ == "__main__":
 
