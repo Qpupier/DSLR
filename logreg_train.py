@@ -6,14 +6,14 @@
 #    By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2026/09/29 11:49:42 by qpupier           #+#    #+#              #
-#    Updated: 2026/10/01 14:17:43 by qpupier          ###   ########lyon.fr    #
+#    Updated: 2026/10/01 14:34:01 by qpupier          ###   ########lyon.fr    #
 #                                                                              #
 # **************************************************************************** #
 
 from utils import *
 
 LEARNING_RATE = 0.1
-NB_EPOCHS = 1000
+NB_EPOCHS = 600
 
 def gradient_descent(gradients, batch_size, thetas, house):
 	gradients = [gradient / batch_size for gradient in gradients]
@@ -48,9 +48,9 @@ def	train(dataset_path, batch_size, nb_epochs=NB_EPOCHS, display=True):
 	for i in range(nb_epochs):
 		df = df.sample(frac=1, random_state=i).reset_index(drop=True)
 		for house in thetas.keys():
+			loss = 0
 			for index, student in df.iterrows():
 				if not (index % batch_size):
-					loss = 0
 					gradients = [0 for _ in range_size]
 				x = [student[feature] for feature in features] + [1]
 				y = 1 if student[COLUMN_HOUSE_NAME] == house else 0
@@ -59,12 +59,11 @@ def	train(dataset_path, batch_size, nb_epochs=NB_EPOCHS, display=True):
 				error_diff = prediction - y
 				gradients = [gradient_theta + error_diff * x_theta for gradient_theta, x_theta in zip(gradients, x)]
 				if not ((index + 1) % batch_size):
-					loss_history[house].append(-loss / batch_size)
 					thetas[house] = gradient_descent(gradients, batch_size, thetas, house)
 			remaining = m % batch_size
 			if remaining:
-				loss_history[house].append(-loss / remaining)
 				thetas[house] = gradient_descent(gradients, remaining, thetas, house)
+			loss_history[house].append(-loss / m)
 
 	weights_df = pd.DataFrame({
 		"Feature": features + ["Bias"],
