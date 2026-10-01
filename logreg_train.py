@@ -6,7 +6,7 @@
 #    By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2026/09/29 11:49:42 by qpupier           #+#    #+#              #
-#    Updated: 2026/10/01 13:59:51 by qpupier          ###   ########lyon.fr    #
+#    Updated: 2026/10/01 14:17:43 by qpupier          ###   ########lyon.fr    #
 #                                                                              #
 # **************************************************************************** #
 
@@ -21,6 +21,7 @@ def gradient_descent(gradients, batch_size, thetas, house):
 
 def	train(dataset_path, batch_size, nb_epochs=NB_EPOCHS, display=True):
 	df = parse_csv(dataset_path)
+
 	if not COLUMN_HOUSE_NAME in df.columns:
 		error(f"Missing '{COLUMN_HOUSE_NAME}' column in the dataset.")
 	features = get_features_from_df(df)
@@ -29,6 +30,11 @@ def	train(dataset_path, batch_size, nb_epochs=NB_EPOCHS, display=True):
 	if not m:
 		error("The dataset is empty.")
 
+	if len(sys.argv) == 2:
+		batch_size = m
+	elif batch_size < 1 or batch_size > m:
+		error(f"Batch size ({batch_size}) must be between 1 and {m}.")
+	
 	mins = pd.Series([df[feature].min() for feature in features], index=features)
 	maxs = pd.Series([df[feature].max() for feature in features], index=features)
 	means = pd.Series([df[feature].mean() for feature in features], index=features)
@@ -83,7 +89,17 @@ def	train(dataset_path, batch_size, nb_epochs=NB_EPOCHS, display=True):
 		plt.show()
 
 if __name__ == "__main__":
-	if len(sys.argv) != 2:
+	batch_size = None
+
+	argc = len(sys.argv)
+	if argc == 3 and sys.argv[2] == "--sgd":
+		batch_size = 1
+	elif argc == 4 and sys.argv[2] == "--mini-batch":
+		try:
+			batch_size = int(sys.argv[3])
+		except ValueError:
+			error(f"Batch size must be an integer.")
+	elif argc != 2:
 		error(f"Usage: python logreg_train.py <dataset.csv> [--sgd | --mini-batch <batch_size>]")
-	batch_size = 1
+
 	train(sys.argv[1], batch_size)
