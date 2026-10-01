@@ -6,7 +6,7 @@
 #    By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2026/09/30 17:15:36 by qpupier           #+#    #+#              #
-#    Updated: 2026/09/30 17:28:16 by qpupier          ###   ########lyon.fr    #
+#    Updated: 2026/10/01 12:19:16 by qpupier          ###   ########lyon.fr    #
 #                                                                              #
 # **************************************************************************** #
 
@@ -19,7 +19,7 @@ if __name__ == "__main__":
 	df = parse_csv(dataset_path)
 	train_df = {}
 	for house in HOUSES:
-		train_df[house] = df[df[COLUMN_HOUSE_NAME] == house].sample(frac=0.8, random_state=42)
+		train_df[house] = df[df[COLUMN_HOUSE_NAME] == house].sample(frac=0.8)
 	train_df = pd.concat(train_df.values())
 	test_df = df.drop(train_df.index)
 	dataset_path = dataset_path.rsplit('.', 1)[0]

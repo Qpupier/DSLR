@@ -6,14 +6,14 @@
 #    By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2026/09/29 11:49:42 by qpupier           #+#    #+#              #
-#    Updated: 2026/09/30 19:32:39 by qpupier          ###   ########lyon.fr    #
+#    Updated: 2026/10/01 12:21:30 by qpupier          ###   ########lyon.fr    #
 #                                                                              #
 # **************************************************************************** #
 
 from utils import *
 
-LEARNING_RATE = 0.01
-NB_EPOCHS = 10000
+LEARNING_RATE = 0.1
+NB_EPOCHS = 500
 
 def gradient_descent(gradients, batch_size, thetas, house):
 	gradients = [gradient / batch_size for gradient in gradients]
@@ -33,8 +33,8 @@ if __name__ == "__main__":
 	if not m:
 		error("The dataset is empty.")
 	batch_size = m
-	batch_size = 32
-	batch_size = 1
+	# batch_size = 32
+	# batch_size = 1
 
 	mins = pd.Series([df[feature].min() for feature in features], index=features)
 	maxs = pd.Series([df[feature].max() for feature in features], index=features)
