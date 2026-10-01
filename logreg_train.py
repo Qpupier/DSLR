@@ -6,25 +6,21 @@
 #    By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2026/09/29 11:49:42 by qpupier           #+#    #+#              #
-#    Updated: 2026/10/01 12:21:30 by qpupier          ###   ########lyon.fr    #
+#    Updated: 2026/10/01 13:59:51 by qpupier          ###   ########lyon.fr    #
 #                                                                              #
 # **************************************************************************** #
 
 from utils import *
 
 LEARNING_RATE = 0.1
-NB_EPOCHS = 500
+NB_EPOCHS = 1000
 
 def gradient_descent(gradients, batch_size, thetas, house):
 	gradients = [gradient / batch_size for gradient in gradients]
 	return [theta - LEARNING_RATE * gradient for theta, gradient in zip(thetas[house], gradients)]
 
-if __name__ == "__main__":
-
-	if len(sys.argv) != 2:
-		error(f"Usage: python logreg_train.py <dataset.csv> [--sgd | --mini-batch <batch_size>]")
-
-	df = parse_csv(sys.argv[1])
+def	train(dataset_path, batch_size, nb_epochs=NB_EPOCHS, display=True):
+	df = parse_csv(dataset_path)
 	if not COLUMN_HOUSE_NAME in df.columns:
 		error(f"Missing '{COLUMN_HOUSE_NAME}' column in the dataset.")
 	features = get_features_from_df(df)
@@ -32,9 +28,6 @@ if __name__ == "__main__":
 	m = len(df)
 	if not m:
 		error("The dataset is empty.")
-	batch_size = m
-	# batch_size = 32
-	# batch_size = 1
 
 	mins = pd.Series([df[feature].min() for feature in features], index=features)
 	maxs = pd.Series([df[feature].max() for feature in features], index=features)
@@ -42,33 +35,30 @@ if __name__ == "__main__":
 	range_size = range(len(features) + 1)
 
 	thetas = {house: [0 for _ in range_size] for house in HOUSES}
-	# error_history = {house: [] for house in HOUSES}
 	loss_history = {house: [] for house in HOUSES}
 	df = df.fillna(means)
 	df[features] = normalize(df, features, mins, maxs)
 
-	for i in range(NB_EPOCHS):
+	for i in range(nb_epochs):
 		df = df.sample(frac=1, random_state=i).reset_index(drop=True)
 		for house in thetas.keys():
-			loss = 0
-			abs_errors = 0
 			for index, student in df.iterrows():
 				if not (index % batch_size):
+					loss = 0
 					gradients = [0 for _ in range_size]
 				x = [student[feature] for feature in features] + [1]
 				y = 1 if student[COLUMN_HOUSE_NAME] == house else 0
 				prediction = h(thetas[house], x)
 				loss += y * log(prediction) + (1 - y) * log(1 - prediction)
 				error_diff = prediction - y
-				abs_errors += abs(error_diff)
 				gradients = [gradient_theta + error_diff * x_theta for gradient_theta, x_theta in zip(gradients, x)]
 				if not ((index + 1) % batch_size):
+					loss_history[house].append(-loss / batch_size)
 					thetas[house] = gradient_descent(gradients, batch_size, thetas, house)
 			remaining = m % batch_size
 			if remaining:
+				loss_history[house].append(-loss / remaining)
 				thetas[house] = gradient_descent(gradients, remaining, thetas, house)
-			# error_history[house].append(abs_errors / m)
-			loss_history[house].append(-loss / m)
 
 	weights_df = pd.DataFrame({
 		"Feature": features + ["Bias"],
@@ -78,25 +68,22 @@ if __name__ == "__main__":
 	})
 	for house in HOUSES:
 		weights_df[f"Theta_{house}"] = thetas[house]
-	print(weights_df)
+	if display:
+		print(weights_df)
 	weights_df.to_csv('weights.csv', index=False)
 
-	for house in HOUSES:
-		plt.plot(loss_history[house], label=house)
-	plt.xlabel("Epochs")
-	plt.ylabel("Loss")
-	plt.title("Loss during gradient descent")
-	plt.legend()
-	plt.grid(True)
-	plt.show()
+	if display:
+		for house in HOUSES:
+			plt.plot(loss_history[house], label=house)
+		plt.xlabel("Epochs")
+		plt.ylabel("Loss")
+		plt.title("Loss during gradient descent")
+		plt.legend()
+		plt.grid(True)
+		plt.show()
 
-	# plt.figure(figsize=(10, 6))
-	# for house in HOUSES:
-	# 	plt.plot(error_history[house], label=house)
-	# plt.title("Evolution of the error by house")
-	# plt.xlabel("Epochs")
-	# plt.ylabel("Error")
-	# plt.legend()
-	# plt.grid(True)
-	# plt.tight_layout()
-	# plt.show()
+if __name__ == "__main__":
+	if len(sys.argv) != 2:
+		error(f"Usage: python logreg_train.py <dataset.csv> [--sgd | --mini-batch <batch_size>]")
+	batch_size = 1
+	train(sys.argv[1], batch_size)
