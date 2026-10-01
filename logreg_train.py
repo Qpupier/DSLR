@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    logreg_train.py                                    :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+         #
+#    By: tdutel <tdutel@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2026/09/29 11:49:42 by qpupier           #+#    #+#              #
-#    Updated: 2026/10/01 12:21:30 by qpupier          ###   ########lyon.fr    #
+#    Updated: 2026/10/01 13:45:52 by tdutel           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -21,7 +21,17 @@ def gradient_descent(gradients, batch_size, thetas, house):
 
 if __name__ == "__main__":
 
-	if len(sys.argv) != 2:
+
+	batch_size = None
+
+	if len(sys.argv) == 3 and sys.argv[2] == "--sgd":
+		batch_size = 1
+	elif len(sys.argv) == 4 and sys.argv[2] == "--mini-batch":
+		try:
+			batch_size = int(sys.argv[3])
+		except ValueError:
+			error(f"Batch size must be an integer.")
+	elif len(sys.argv) != 2:
 		error(f"Usage: python logreg_train.py <dataset.csv> [--sgd | --mini-batch <batch_size>]")
 
 	df = parse_csv(sys.argv[1])
@@ -32,10 +42,12 @@ if __name__ == "__main__":
 	m = len(df)
 	if not m:
 		error("The dataset is empty.")
-	batch_size = m
-	# batch_size = 32
-	# batch_size = 1
 
+	if len(sys.argv) == 2:
+		batch_size = m
+	elif batch_size < 1 or batch_size > m:
+		error(f"Batch size ({batch_size}) must be between 1 and {m}.")
+	
 	mins = pd.Series([df[feature].min() for feature in features], index=features)
 	maxs = pd.Series([df[feature].max() for feature in features], index=features)
 	means = pd.Series([df[feature].mean() for feature in features], index=features)
