@@ -39,4 +39,5 @@ python3 separate_train_dataset dataset_train.csv
 
 ## Contact
 tdutel@student.42lyon.fr
+
 qpupier@student.42lyon.fr
