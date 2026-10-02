@@ -1,5 +1,7 @@
 # DSLR
 
+Data Science - Logistic Regression
+
 ## Description
 A linear classification model: the logistic regression.
 
@@ -22,6 +24,7 @@ python3 scatter_plot.py  # Scatter plot
 python3 pair_plot.py  # Pair plot (Histograms on the diagonal)
 
 python3 logreg_train.py dataset_train.csv  # Train
+# python logreg_train.py <dataset.csv> [--sgd | --mini-batch <batch_size>]
 # Saves the weights (weights.csv)
 
 python3 logreg_predict.py dataset_test.csv weights.csv  # Prediction
