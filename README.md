@@ -1,9 +1,9 @@
-# README
-
 # DSLR
 
 ## Description
 A linear classification model: the logistic regression.
+
+Developed as an academic project at 42 Lyon.
 
 ## Installation
 To install the dependencies, run the following command:
